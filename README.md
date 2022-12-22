@@ -1,1 +1,1 @@
-# distributed DNN
+# Distributed DNN
