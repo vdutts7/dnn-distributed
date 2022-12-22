@@ -70,7 +70,22 @@ int main() {
                      buffers_fwd_mp, buffers_fwd_mp_reduced,
                      comm_pp, comm_mp);
 
-    // Deallocate buffers??
+    run_backward_pass(steps_for_accumulation, stage_index, total_pipeline_stages,
+                      send_buffer_bwd, recv_buffer_bwd,
+                      buffers_bwd_mp, buffers_bwd_mp_reduced,
+                      comm_pp);
+
+    aggregate_gradients(grad_buffer, aggregated_grad_buffer, comm_dp);
+
+    // Deallocate buffers
+    for (int i = 0; i < 2; i++) {
+        delete[] buffers_fwd_mp[i];
+        delete[] buffers_fwd_mp_reduced[i];
+        delete[] buffers_bwd_mp[i];
+        delete[] buffers_bwd_mp_reduced[i];
+    }
+
+    return 0;
 }
 
 void run_forward_pass(int steps_for_accumulation, int stage_index, int total_pipeline_stages,
