@@ -120,3 +120,31 @@ void run_forward_pass(int steps_for_accumulation, int stage_index, int total_pip
         }
     }
 }
+
+void run_backward_pass(int steps_for_accumulation, int stage_index, int total_pipeline_stages,
+                       float *send_buffer_bwd, float *recv_buffer_bwd,
+                       float **buffers_bwd_mp, float **buffers_bwd_mp_reduced,
+                       MPI_Comm comm_pp) {
+
+    MPI_Request reqs_bwd[2];
+
+    for (int i = 0; i < 2; i++) {
+        reqs_bwd[i] = MPI_REQUEST_NULL;
+    }
+
+    for (int step = 0; step < steps_for_accumulation; step++) {
+        if (stage_index == total_pipeline_stages - 1) {
+            usleep(BACKWARD_COMPUTE_TIME); // Emulate computation time
+            MPI_Isend(send_buffer_bwd, P2P_BUFFER_SIZE, MPI_FLOAT, stage_index - 1, step, comm_pp, &reqs_bwd[0]);
+        } else if (stage_index == 0) {
+            MPI_Irecv(recv_buffer_bwd, P2P_BUFFER_SIZE, MPI_FLOAT, stage_index + 1, step, comm_pp, &reqs_bwd[1]);
+            MPI_Wait(&reqs_bwd[1], MPI_STATUS_IGNORE);
+            usleep(BACKWARD_COMPUTE_TIME); // Emulate computation time
+        } else {
+            MPI_Irecv(recv_buffer_bwd, P2P_BUFFER_SIZE, MPI_FLOAT, stage_index + 1, step, comm_pp, &reqs_bwd[1]);
+            MPI_Wait(&reqs_bwd[1], MPI_STATUS_IGNORE);
+            usleep(BACKWARD_COMPUTE_TIME); // Emulate computation time
+            MPI_Isend(send_buffer_bwd, P2P_BUFFER_SIZE, MPI_FLOAT, stage_index - 1, step, comm_pp, &reqs_bwd[0]);
+        }
+    }
+}
