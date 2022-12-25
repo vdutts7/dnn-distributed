@@ -148,3 +148,9 @@ void run_backward_pass(int steps_for_accumulation, int stage_index, int total_pi
         }
     }
 }
+
+void aggregate_gradients(float *grad_buffer, float *aggregated_grad_buffer,
+                        MPI_Comm comm_dp) {
+    // Aggregate gradients across data parallel group
+    MPI_Allreduce(grad_buffer, aggregated_grad_buffer, DATA_PARALLEL_SIZE, MPI_FLOAT, MPI_SUM, comm_dp);
+}
