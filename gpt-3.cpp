@@ -1,3 +1,6 @@
+// C++/MPI proxy • 175B parameter GPT-3 model 
+// Distributed training (hybrid of model x data parallelism)
+
 #include <mpi.h>
 #include <unistd.h>
 #include <stdio.h>
