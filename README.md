@@ -51,15 +51,15 @@ These proxies cover:
 
 Compile via:
 
-`mpicxx communications/gpt2.cpp -o gpt2`
+`mpicxx communications/gpt-2.cpp -o gpt-2`
 
 Then run:
 
-`mpirun -n 32 ./gpt2`
+`mpirun -n 32 ./gpt-2`
 
 Set the total num of **Transformer layers** AND total num of **pipeline stages**:
 
-`mpirun -n 32 ./gpt2 64 8`
+`mpirun -n 32 ./gpt-2 64 8`
 
 
 
