@@ -45,6 +45,22 @@ These proxies cover:
 - *Pipeline parallelism*: different stages of a NN are processed on different processors, in a pipelined fashion
 - *Hybrid parallelism*: combines two or more of the above types of parallelism i.e. different parts of the NN are processed in parallel across different processors AND data is also split across processors
 
+### Benchmarking GPU interconnect performance • NCCL/MPI
+
+- **MPI for distributed training**: managing communication between nodes in a distributed system, enabling efficient data parallelism and model parallelism strategies
+- **NCCL for optimized GPU communication**: common communication operations such as `all-reduce` performed on NVIDIA GPUs
+
+
+## Scaling techniques for model parallelism
+
+- **Essential for large model** training i.e. ones that don't even fit into the memory of a single GPU
+- **The GPT-3 example** shows a hybrid approach to model and data parallelism. Scaling out training of extremely large models (GPT-3 has over >150 billion paramaters) across multiple GPUs and nodes
+
+
+## Optimizing CNNs
+
+- **The CosmoFlow example** illustrates distributed training of a CNN, leveraging GPU acceleration for performance gains.
+
 
 
 ## 💻 How to build
