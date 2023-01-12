@@ -1,6 +1,8 @@
 
 <div align="center">
 
+<img src="https://res.cloudinary.com/dnz16usmk/image/upload/v1708598121/dnn.png" alt="logo" width="100" height="80"  />
+
   <h1 align="center">
         Distributed DNNs (Deep Neural Networks)
     </h1>
